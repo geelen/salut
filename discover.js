@@ -46,12 +46,14 @@ var server = net.createServer(function (socket) {
   console.log("Got us a socket!");
 }).listen(54127);
 
-process.on('SIGINT', function () {
-  Object.keys(clients).forEach(function(k) {
+var release = function () {
+  Object.keys(clients).forEach(function (k) {
     clients[k].socket.end();
   });
   ad.stop();
   browser.stop();
   server.close();
   console.log('About to exit.');
-});
+};
+process.on('SIGINT', release);
+process.on('EXIT', release);

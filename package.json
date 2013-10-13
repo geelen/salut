@@ -2,7 +2,7 @@
   "name": "salut",
   "version": "0.0.0",
   "description": "",
-  "main": "discover.js",
+  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,6 +16,7 @@
     "url": "https://github.com/geelen/salut/issues"
   },
   "dependencies": {
-    "mdns": "~1.1.0"
+    "mdns": "~1.1.0",
+    "prompt": "~0.2.11"
   }
 }
