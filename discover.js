@@ -25,11 +25,14 @@ var client = function (service) {
 var browser = mdns.createBrowser(mdns.tcp('salut'));
 browser.on('serviceUp', function (service) {
   console.log("service up: ", service);
-  clients[service.fullname] = client(service);
+  clients[service.name] = client(service);
 });
 browser.on('serviceDown', function (service) {
-  clients[service.fullname].socket.disconnect();
-  delete clients[service.fullname];
+  var client = clients[service.name];
+  if (client) {
+    delete clients[service.name];
+    client.socket.end();
+  }
   console.log("service down: ", service);
 });
 browser.start();
