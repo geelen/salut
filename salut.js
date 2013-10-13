@@ -8,7 +8,7 @@ console.log("Logging you in as " + username);
 if (process.argv.length < 4) console.log("USAGE node salut.js [USERNAME] [AVATAR_URL]")
 
 discovery.connect(username, avatar).then(function (chat) {
-    chat.onMessage(function(message) {
+    chat.on('message', function(message) {
       console.log("[" + message.username + "] " + message.body);
     });
     process.stdin.resume();

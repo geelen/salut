@@ -2,7 +2,8 @@
 var Q = require('q'),
   mdns = require('mdns'),
   net = require('net'),
-  JsonSocket = require('json-socket');
+  JsonSocket = require('json-socket'),
+  EventEmitter = require('events').EventEmitter;
 
 var port = 54127;
 var connect = function (service) {
@@ -18,24 +19,22 @@ var connect = function (service) {
 module.exports = {
   connect: function (username, avatar) {
     var deferred = Q.defer();
-    var Chat = {
-      connections: {},
-      onMessage: undefined, //bound once our server is up
-      send: function (message) {
-        Object.keys(Chat.connections).forEach(function (k) {
-          Chat.connections[k].sendMessage({username: username, avatar: avatar, body: message}, function(err) {
-            console.log(err)
-          });
-        });
-      }
+
+    var Chat = new EventEmitter();
+    Chat.connections = {};
+    Chat.send = function (message) {
+      console.log(Chat.connections)
+      Object.keys(Chat.connections).forEach(function (k) {
+        Chat.connections[k].sendMessage({username: username, avatar: avatar, body: message});
+      });
     };
 
     // Start our display server
     var display = net.createServer(function (_socket) {
       var socket = new JsonSocket(_socket);
-      Chat.onMessage = function (callback) {
-        socket.on("message", callback);
-      };
+      socket.on("message", function (m) {
+        Chat.emit("message", m);
+      });
       // Our server is up, our methods are bound, we're good to go.
       deferred.resolve(Chat);
     }).listen(port);
