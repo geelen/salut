@@ -1,19 +1,19 @@
 // import the module
 var Q = require('q'),
   mdns = require('mdns'),
-  net = require('net');
+  net = require('net'),
+  JsonSocket = require('json-socket');
 
 var port = 54127;
 var connect = function (service) {
-  return net.createConnection({host: service.host, port: service.port})
+  return new JsonSocket(net.createConnection({host: service.host, port: service.port})
     .on('connect', function () {
       console.log("[" + service.host + "] CONNECTED");
     })
     .on('data', function (data) {
       console.log("[" + service.host + "] " + data.toString());
-    })
+    }));
 };
-
 
 module.exports = {
   connect: function (username, avatar) {
@@ -22,19 +22,19 @@ module.exports = {
       connections: {},
       onMessage: undefined, //bound once our server is up
       send: function (message) {
-        var payload = JSON.stringify({username: username, avatar: avatar, body: message});
         Object.keys(Chat.connections).forEach(function (k) {
-          Chat.connections[k].write(payload);
+          Chat.connections[k].sendMessage({username: username, avatar: avatar, body: message}, function(err) {
+            console.log(err)
+          });
         });
       }
     };
 
     // Start our display server
-    var display = net.createServer(function (socket) {
+    var display = net.createServer(function (_socket) {
+      var socket = new JsonSocket(_socket);
       Chat.onMessage = function (callback) {
-        socket.on("data", function(data) {
-          callback(JSON.parse(data));
-        });
+        socket.on("message", callback);
       };
       // Our server is up, our methods are bound, we're good to go.
       deferred.resolve(Chat);
@@ -50,9 +50,11 @@ module.exports = {
       console.log("Service UP: " + service.name);
       var connection = Chat.connections[service.name];
       if (!connection) {
-        Chat.connections[service.name] = connect(service).on('connect', function () {
-          this.write(JSON.stringify({username: username, avatar: avatar, body: "has joined the room"}));
+        connection = connect(service);
+        connection.on('connect', function () {
+          connection.sendMessage({username: username, avatar: avatar, body: "has joined the room"});
         });
+        Chat.connections[service.name] = connection;
       }
     });
     browser.on('serviceDown', function (service) {
