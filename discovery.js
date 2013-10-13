@@ -7,13 +7,7 @@ var Q = require('q'),
 
 var port = 54127;
 var connect = function (service) {
-  return new JsonSocket(net.createConnection({host: service.host, port: service.port})
-    .on('connect', function () {
-      console.log("[" + service.host + "] CONNECTED");
-    })
-    .on('data', function (data) {
-      console.log("[" + service.host + "] " + data.toString());
-    }));
+  return new JsonSocket(net.createConnection({host: service.host, port: service.port}));
 };
 
 module.exports = {
@@ -23,7 +17,6 @@ module.exports = {
     var Chat = new EventEmitter();
     Chat.connections = {};
     Chat.send = function (message) {
-      console.log(Chat.connections)
       Object.keys(Chat.connections).forEach(function (k) {
         Chat.connections[k].sendMessage({username: username, avatar: avatar, body: message});
       });
@@ -75,6 +68,7 @@ module.exports = {
       browser.stop();
       display.close();
       console.log('Everything stopped. Exiting.');
+      process.exit();
     };
     process.on('SIGINT', release);
     process.on('EXIT', release);
