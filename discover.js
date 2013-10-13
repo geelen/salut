@@ -5,11 +5,6 @@ var mdns = require('mdns');
 var ad = mdns.createAdvertisement(mdns.tcp('salut'), 54127);
 ad.start();
 
-process.on('SIGINT', function() {
-  ad.stop();
-  console.log('About to exit.');
-});
-
 var browser = mdns.createBrowser(mdns.tcp('salut'));
 browser.on('serviceUp', function(service) {
   console.log("service up: ", service);
@@ -18,3 +13,9 @@ browser.on('serviceDown', function(service) {
   console.log("service down: ", service);
 });
 browser.start();
+
+process.on('SIGINT', function() {
+  ad.stop();
+  browser.stop();
+  console.log('About to exit.');
+});
