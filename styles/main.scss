@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 body {
   @extend .reset-ui;
   text-rendering: optimizeLegibility;
@@ -34,6 +38,7 @@ body {
 
 person.you {
   font-weight: bold;
+  color: red;
 }
 
 .person {
