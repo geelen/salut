@@ -14,7 +14,6 @@
           $scope.$emit('Salut.LayoutInvalidated');
         }
       }
-      console.log(e.keyCode)
     }
   });
 
