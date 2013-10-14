@@ -21,10 +21,13 @@
     <div class="main" ng-if="User.loggedIn">
       <header class="header">
         <h1>Salut!</h1>
-        <a href class="header-logout">Log out</a>
+        <div class="header-logged-in">
+          <person who="User"></person>
+          <a href class="topcoat-button" ng-click="logOut()">Log out</a>
+        </div>
       </header>
       <section class="people" ng-controller="PeopleCtrl">
-
+        <person ng-repeat="person in people" who="person"></person>
       </section>
       <section class="chat" ng-controller="ChatCtrl">
 
@@ -38,6 +41,11 @@
     <script type="text/javascript" src="app/app.js"></script>
     <script type="text/javascript" src="app/controllers/main_ctrl.js"></script>
     <script type="text/javascript" src="app/controllers/login_ctrl.js"></script>
+    <script type="text/javascript" src="app/controllers/people_ctrl.js"></script>
+    <script type="text/javascript" src="app/controllers/chat_ctrl.js"></script>
+    <script type="text/javascript" src="app/controllers/entry_ctrl.js"></script>
     <script type="text/javascript" src="app/services/user.js"></script>
+    <script type="text/javascript" src="app/services/chat.js"></script>
+    <script type="text/javascript" src="app/directives/person.js"></script>
   </body>
 </html>

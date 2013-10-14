@@ -15,8 +15,6 @@
         username: User.username, avatar: User.avatar, loggedIn: User.loggedIn
       }));
     };
-    User.$watch('username', User.save);
-    User.$watch('avatar', User.save);
     User.$watch('loggedIn', User.save);
 
     var userData = localStorage.getItem("Salut.User"),
