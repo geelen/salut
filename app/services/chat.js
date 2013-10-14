@@ -17,7 +17,7 @@
         {type: "message", timestamp: new Date(new Date() - 2000000), username: "Alice", body: "Bob: whatevs."},
         {type: "message", timestamp: new Date(new Date() - 1000000), username: "Alice", body: "geelen: Hey dude."}
       ],
-      Send: function(username, body) {
+      Send: function (username, body) {
         this.Messages.push({type: "message", timestamp: new Date(), username: username, body: body})
       }
     }
@@ -27,7 +27,23 @@
 
 (function (app) {
 
-  app.factory('Chat', function ($scope) {
+  app.factory('Chat', function (User, $rootScope) {
+
+    var discovery = require('./discovery'),
+      Chat = { People: [], Messages: [] };
+
+    discovery.connect(User.username, User.avatar).then(function (chat) {
+      chat.on('message', function (message) {
+        Chat.Messages.push({type: "message", timestamp: new Date(), username: message.username, body: message.body})
+        $rootScope.$apply();
+      });
+
+      Chat.Send = function (username, body) {
+        chat.send(body.trim());
+      }
+    });
+
+    return Chat;
   });
 
 })(angular.module("RealChat"));
