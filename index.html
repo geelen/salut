@@ -1,51 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Salut!</title>
-    <link rel="stylesheet" href="bower_components/topcoat/css/topcoat-desktop-light.css"/>
-    <link rel="stylesheet" href="styles.css"/>
-  </head>
-  <body ng-app="Salut" ng-controller="MainCtrl">
+<head>
+  <title>Salut!</title>
+  <link rel="stylesheet" href="bower_components/topcoat/css/topcoat-desktop-light.css"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body ng-app="Salut" ng-controller="MainCtrl">
 
-    <div class="login-needed" ng-if="!User.loggedIn" ng-controller="LoginCtrl">
-      <h1>Welcome to Salut</h1>
+<div class="login-needed" ng-if="!User.loggedIn" ng-controller="LoginCtrl">
+  <h1>Welcome to Salut</h1>
 
-      <form ng-submit="logIn()">
-        <label> Username: <input type="text" ng-model="User.username"/> </label>
-        <label> Avatar URL: <input type="text" ng-model="User.avatar"/> </label>
-        <img ng-src="{{User.avatar}}"/>
-        <button type="submit">Salut!</button>
-      </form>
-    </div>
+  <form ng-submit="logIn()">
+    <label> Username: <input type="text" ng-model="User.username"/> </label>
+    <label> Avatar URL: <input type="text" ng-model="User.avatar"/> </label>
+    <img ng-src="{{User.avatar}}"/>
+    <button type="submit">Salut!</button>
+  </form>
+</div>
 
-    <div class="main" ng-if="User.loggedIn">
-      <header class="header">
-        <h1>Salut!</h1>
-        <div class="header-logged-in">
-          <person who="User"></person>
-          <a href class="topcoat-button" ng-click="logOut()">Log out</a>
-        </div>
-      </header>
-      <section class="people" ng-controller="PeopleCtrl">
-        <person ng-repeat="person in people" who="person"></person>
-      </section>
-      <section class="chat" ng-controller="ChatCtrl">
+<div class="main" ng-if="User.loggedIn">
+  <header class="header">
+    <h1>Salut!</h1>
+    <section class="people" ng-controller="PeopleCtrl">
+      <person ng-repeat="person in people" who="person"></person>
+      <person class="you" who="User">
+        <a href class="topcoat-button" ng-click="logOut()">✖</a>
+      </person>
+    </section>
+  </header>
+  <section class="chat" ng-controller="ChatCtrl">
 
-      </section>
-      <section class="entry" ng-controller="EntryCtrl">
+  </section>
+  <section class="entry" ng-controller="EntryCtrl">
 
-      </section>
-    </div>
+  </section>
+</div>
 
-    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="app/app.js"></script>
-    <script type="text/javascript" src="app/controllers/main_ctrl.js"></script>
-    <script type="text/javascript" src="app/controllers/login_ctrl.js"></script>
-    <script type="text/javascript" src="app/controllers/people_ctrl.js"></script>
-    <script type="text/javascript" src="app/controllers/chat_ctrl.js"></script>
-    <script type="text/javascript" src="app/controllers/entry_ctrl.js"></script>
-    <script type="text/javascript" src="app/services/user.js"></script>
-    <script type="text/javascript" src="app/services/chat.js"></script>
-    <script type="text/javascript" src="app/directives/person.js"></script>
-  </body>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="app/app.js"></script>
+<script type="text/javascript" src="app/controllers/main_ctrl.js"></script>
+<script type="text/javascript" src="app/controllers/login_ctrl.js"></script>
+<script type="text/javascript" src="app/controllers/people_ctrl.js"></script>
+<script type="text/javascript" src="app/controllers/chat_ctrl.js"></script>
+<script type="text/javascript" src="app/controllers/entry_ctrl.js"></script>
+<script type="text/javascript" src="app/services/user.js"></script>
+<script type="text/javascript" src="app/services/chat.js"></script>
+<script type="text/javascript" src="app/directives/person.js"></script>
+</body>
 </html>
