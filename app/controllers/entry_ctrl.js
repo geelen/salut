@@ -11,6 +11,7 @@
           e.preventDefault();
           Chat.Send($scope.User.username, $scope.entry);
           $scope.entry = '';
+          $scope.$emit('Salut.LayoutInvalidated');
         }
       }
       console.log(e.keyCode)

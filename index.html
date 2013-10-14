@@ -28,7 +28,7 @@
       </person>
     </section>
   </header>
-  <section class="chat" ng-controller="ChatCtrl">
+  <section class="chat" ng-controller="ChatCtrl" sticky-bottom>
     <div ng-repeat="message in messages" class="message" ng-class="message.type">
       <span class="message-username">{{ message.username }}</span>
       <span class="message-body">{{ message.body }}</span>
@@ -49,5 +49,6 @@
 <script type="text/javascript" src="app/services/user.js"></script>
 <script type="text/javascript" src="app/services/chat.js"></script>
 <script type="text/javascript" src="app/directives/person.js"></script>
+<script type="text/javascript" src="app/directives/sticky_bottom.js"></script>
 </body>
 </html>
