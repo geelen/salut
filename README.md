@@ -2,6 +2,11 @@
 
 A chat client for the people on your wifi. No log in, no worries.
 
+# Command line version
+
+   npm install
+   node salut.js
+
 # Building
 
 You'll need node-webkit.
