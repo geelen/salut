@@ -29,10 +29,13 @@
     </section>
   </header>
   <section class="chat" ng-controller="ChatCtrl">
-
+    <div ng-repeat="message in messages" class="message" ng-class="message.type">
+      <span class="message-username">{{ message.username }}</span>
+      <span class="message-body">{{ message.body }}</span>
+    </div>
   </section>
   <section class="entry" ng-controller="EntryCtrl">
-
+    <textarea class="topcoat-textarea" ng-model="entry" cols="30" rows="1" ng-keydown="keydown($event)"></textarea>
   </section>
 </div>
 

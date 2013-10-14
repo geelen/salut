@@ -16,7 +16,10 @@
         {type: "message", timestamp: new Date(new Date() - 3000000), username: "Bob", body: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."},
         {type: "message", timestamp: new Date(new Date() - 2000000), username: "Alice", body: "Bob: whatevs."},
         {type: "message", timestamp: new Date(new Date() - 1000000), username: "Alice", body: "geelen: Hey dude."}
-      ]
+      ],
+      Send: function(username, body) {
+        this.Messages.push({type: "message", timestamp: new Date(), username: username, body: body})
+      }
     }
   });
 

@@ -1,3 +1,13 @@
+body {
+  text-rendering: optimizeLegibility;
+}
+
+@font-face {
+  font-family: "Source Sans";
+  src: url("/bower_components/topcoat/font/SourceSansPro-Bold.otf");
+  font-weight: 700;
+}
+
 .main {
   display: -webkit-box;
   display: -webkit-flex;
@@ -11,6 +21,7 @@
   -moz-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  height: 100%;
 }
 
 .chat {
@@ -52,4 +63,38 @@ person.you {
   width: 60px;
   height: 60px;
   border-radius: 50%;
+}
+
+.chat {
+  padding: 0 12px;
+}
+
+.message {
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.message.event {
+  color: #a5a8a8;
+  font-weight: 600;
+}
+
+.message.event .message-username::after {
+  content: '';
+}
+
+.message-username {
+  font-weight: bold;
+}
+
+.message-username::after {
+  content: ': ';
+}
+
+.entry {
+  padding: 12px;
+}
+
+.entry textarea {
+  width: 100%;
 }
