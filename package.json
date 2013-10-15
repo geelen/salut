@@ -16,7 +16,6 @@
     "url": "https://github.com/geelen/salut/issues"
   },
   "dependencies": {
-    "mdns": "~1.1.0",
     "q": "~0.9.7",
     "json-socket": "~0.1.2",
     "multicast-eventemitter": "~0.10.2"
