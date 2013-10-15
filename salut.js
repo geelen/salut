@@ -35,5 +35,7 @@ process.stdin.on("data", function (data) {
 process.on('SIGINT', function () {
   console.log("Leaving!");
   emitter.emit('Salut.USER_LEFT', username);
-  setTimeout(process.exit, 0);
+  emitter.on('Salut.USER_LEFT', function (user) {
+    if (user === username) process.exit();
+  });
 });

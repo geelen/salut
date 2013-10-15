@@ -83,6 +83,7 @@
 
     // We are leaving!
     process.on('exit', function () {
+      console.log("Leaving!");
       emitter.emit('Salut.USER_LEFT', User.username);
     });
 
