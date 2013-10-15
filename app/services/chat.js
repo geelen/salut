@@ -82,9 +82,12 @@
     }
 
     // We are leaving!
-    process.on('exit', function () {
+    var gui = require('nw.gui');
+    var winmain = gui.Window.get();
+    winmain.on('close', function () {
       console.log("Leaving!");
       emitter.emit('Salut.USER_LEFT', User.username);
+      gui.App.quit();
     });
 
     return Chat;
