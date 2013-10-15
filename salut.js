@@ -25,7 +25,10 @@ var emitter = mee.getEmitter();
 // subscribe to JOINED
 emitter.on('Salut.USER_JOINED', function (user, avatar) {
   console.log('A wild user has appeared. ' + user);
-  if (user !== username) emitter.emit('Salut.USER_JOINED', username, avatar);
+  if (user !== username) emitter.emit('Salut.USER_HERE', username, avatar);
+});
+emitter.on('Salut.USER_HERE', function (user, avatar) {
+  console.log(user + ' is in the room.');
 });
 
 // subscribe to MESSAGE
