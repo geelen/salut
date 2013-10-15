@@ -35,6 +35,7 @@
     discovery.connect(User.username, User.avatar).then(function (chat) {
       chat.on('message', function (message) {
         Chat.Messages.push({type: "message", timestamp: new Date(), username: message.username, body: message.body})
+        $rootScope.$emit('Salut.LayoutInvalidated');
         $rootScope.$apply();
       });
 
