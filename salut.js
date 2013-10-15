@@ -23,27 +23,27 @@ var mee = require('multicast-eventemitter');
 var emitter = mee.getEmitter();
 
 // subscribe to JOINED
-emitter.on('Salut.USER_JOINED', function(user, avatar) {
+emitter.on('Salut.USER_JOINED', function (user, avatar) {
   console.log('A wild user has appeared. ' + user);
+  if (user !== username) emitter.emit('Salut.USER_JOINED', username, avatar);
 });
 
 // subscribe to MESSAGE
-emitter.on('Salut.MESSAGE', function(user, body) {
+emitter.on('Salut.MESSAGE', function (user, body) {
   console.log("[" + user + "] " + body);
 });
-
 
 // We are here!
 emitter.emit('Salut.USER_JOINED', username, avatar);
 
 // This is what we have to say!
 process.stdin.resume();
-process.stdin.on("data", function(data) {
+process.stdin.on("data", function (data) {
   emitter.emit('Salut.MESSAGE', username, data.toString().trim());
 });
 
 // We are leaving!
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
   emitter.emit('Salut.USER_LEFT', username);
   process.exit();
 });
