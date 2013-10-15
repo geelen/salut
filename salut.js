@@ -1,34 +1,20 @@
 // NodeJS example of the Salut API (for command-line usage)
 
-var //discovery = require('./discovery'),
+var mee = require('multicast-eventemitter');
   username = process.argv[2] || require('os').hostname(),
   avatar = process.argv[3] || "http://i.imgur.com/V27656Y.gif";
-//
-//console.log("Logging you in as " + username);
-//if (process.argv.length < 4) console.log("USAGE node salut.js [USERNAME] [AVATAR_URL]")
-//
-//discovery.connect(username, avatar).then(function (chat) {
-//    chat.on('message', function(message) {
-//      console.log("[" + message.username + "] " + message.body);
-//    });
-//    process.stdin.resume();
-//    process.stdin.on("data", function(data) {
-//      chat.send(data.toString().trim());
-//    });
-//  });
-
-
-var mee = require('multicast-eventemitter');
-
-var emitter = mee.getEmitter();
+  emitter = mee.getEmitter();
 
 // subscribe to JOINED
-emitter.on('Salut.USER_JOINED', function (user, avatar) {
+emitter.on('Salut.USER_JOINED', function (user, av) {
   console.log('A wild user has appeared. ' + user);
   if (user !== username) emitter.emit('Salut.USER_HERE', username, avatar);
 });
 emitter.on('Salut.USER_HERE', function (user, avatar) {
   console.log(user + ' is in the room.');
+});
+emitter.on('Salut.USER_LEFT', function (user, av) {
+  console.log('Goodbye ' + user + '!');
 });
 
 // subscribe to MESSAGE
@@ -47,6 +33,7 @@ process.stdin.on("data", function (data) {
 
 // We are leaving!
 process.on('SIGINT', function () {
+  console.log("Leaving!");
   emitter.emit('Salut.USER_LEFT', username);
-  process.exit();
+  setTimeout(process.exit, 0);
 });

@@ -9,7 +9,7 @@
         //ENTER KEY
         if (!e.shiftKey) {
           e.preventDefault();
-          Chat.Send($scope.User.username, $scope.entry);
+          Chat.Send($scope.entry);
           $scope.entry = '';
           $scope.$emit('Salut.LayoutInvalidated');
         }

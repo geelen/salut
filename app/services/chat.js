@@ -1,6 +1,6 @@
 (function (app) {
 
-  app.factory('Chat', function () {
+  app.factory('Chat', function (User) {
     return {
       People: [
         {username: "Alice", avatar: "http://lorempixel.com/80/80/abstract/1"},
@@ -17,8 +17,8 @@
         {type: "message", timestamp: new Date(new Date() - 2000000), username: "Alice", body: "Bob: whatevs."},
         {type: "message", timestamp: new Date(new Date() - 1000000), username: "Alice", body: "geelen: Hey dude."}
       ],
-      Send: function (username, body) {
-        this.Messages.push({type: "message", timestamp: new Date(), username: username, body: body})
+      Send: function (body) {
+        this.Messages.push({type: "message", timestamp: new Date(), username: User.username, body: body})
       }
     }
   });
@@ -29,19 +29,61 @@
 
   app.factory('Chat', function (User, $rootScope) {
 
-    var discovery = require('./discovery'),
-      Chat = { People: [], Messages: [] };
+    var emitter = require('multicast-eventemitter').getEmitter();
 
-    discovery.connect(User.username, User.avatar).then(function (chat) {
-      chat.on('message', function (message) {
-        Chat.Messages.push({type: "message", timestamp: new Date(), username: message.username, body: message.body})
-        $rootScope.$emit('Salut.LayoutInvalidated');
-        $rootScope.$apply();
-      });
+    var Chat = { People: [], Messages: [] };
 
-      Chat.Send = function (username, body) {
-        chat.send(body.trim());
+    // subscribe to JOINED
+    emitter.on('Salut.USER_JOINED', function (username, avatar) {
+      console.log('A wild user has appeared. ' + username);
+      Chat.Messages.push({type: "event", timestamp: new Date(), username: username, body: "joined the room."});
+      if (username !== User.username) {
+        Chat.People.push({username: username, avatar: avatar});
+        emitter.emit('Salut.USER_HERE', User.username, User.avatar);
       }
+      $rootScope.$apply();
+    });
+    emitter.on('Salut.USER_HERE', function (username, avatar) {
+      if (username !== User.username) {
+        console.log(username + ' is in the room.');
+        var knowIt = false;
+        Chat.People.forEach(function (c) {
+          if (c.username === username) knowIt = true;
+        });
+        if (!knowIt) {
+          Chat.People.push({username: username, avatar: avatar});
+          Chat.Messages.push({type: "event", timestamp: new Date(), username: username, body: "is here."});
+        }
+        $rootScope.$apply();
+      }
+    });
+    emitter.on('Salut.USER_LEFT', function (username) {
+      console.log(username + ' is gone.');
+      Chat.People.forEach(function (c, i) {
+        if (c.username === username) Chat.People.splice(i, 1);
+      });
+      Chat.Messages.push({type: "event", timestamp: new Date(), username: username, body: "left the room."});
+      $rootScope.$apply();
+    });
+
+
+    // subscribe to MESSAGE
+    emitter.on('Salut.MESSAGE', function (username, body) {
+      console.log("[" + username + "] " + body);
+      Chat.Messages.push({type: "message", timestamp: new Date(), username: username, body: body});
+      $rootScope.$apply();
+    });
+
+    // We are here!
+    emitter.emit('Salut.USER_JOINED', User.username, User.avatar);
+
+    Chat.Send = function (body) {
+      emitter.emit('Salut.MESSAGE', User.username, body);
+    }
+
+    // We are leaving!
+    process.on('exit', function () {
+      emitter.emit('Salut.USER_LEFT', User.username);
     });
 
     return Chat;
